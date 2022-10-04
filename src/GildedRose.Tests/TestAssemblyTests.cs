@@ -2,12 +2,16 @@ using Xunit;
 
 namespace GildedRose.Tests
 {
-    public class TestAssemblyTests
+    public class ProgramTest
     {
         [Fact]
-        public void TestTheTruth()
+        public void UpdateQuality()
         {
-            Assert.True(true);
+            //arrange
+
+            //act
+
+            //assert
         }
     }
 }

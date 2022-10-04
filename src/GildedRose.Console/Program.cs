@@ -4,8 +4,15 @@ using System.Linq;
 
 namespace GildedRose.Console
 {
-    class Program
+    public class Program
     {
+        public List<MarkedItem> markedItems;
+
+        public Program(List<MarkedItem> markedItems)
+        {
+            this.markedItems = markedItems;
+        }
+
         static void Main(string[] args)
         {
             System.Console.WriteLine("OMGHAI!");
@@ -45,14 +52,16 @@ namespace GildedRose.Console
                                     }
                 };
 
+            var app = new Program(markedItems);
+            
 
-            UpdateQuality(markedItems);
+            app.UpdateQuality();
             System.Console.ReadKey();
 
         }
 
 
-        public static void CheckForOverdue(MarkedItem item, int type)
+        public void CheckForOverdue(MarkedItem item, int type)
         {
             switch (type)
             {
@@ -83,7 +92,7 @@ namespace GildedRose.Console
             }
 
         }
-        public static void UpdateDefault(MarkedItem item)
+        public void UpdateDefault(MarkedItem item)
         {
             if (item.isDefault && item.Item.Quality > MarkedItem.minQuality)
             {
@@ -92,7 +101,7 @@ namespace GildedRose.Console
             }
         }
 
-        public static void UpdateConjured(MarkedItem item)
+        public void UpdateConjured(MarkedItem item)
         {
             if (item.isConjured && item.Item.Quality > MarkedItem.ConjuredMinQualityValue)
             {
@@ -101,7 +110,7 @@ namespace GildedRose.Console
             }
         }
 
-        public static void UpdateIncreased(MarkedItem item)
+        public void UpdateIncreased(MarkedItem item)
         {
             if (item.isQualityIncreases && item.Item.Quality < MarkedItem.maxQuality)
             {
@@ -111,7 +120,7 @@ namespace GildedRose.Console
 
         }
 
-        public static void UpdateIncreasedWithOptions(MarkedItem item)
+        public void UpdateIncreasedWithOptions(MarkedItem item)
         {
             if (item.isQualityIncreasesWithOptions && item.IncreaseOptions != null && item.Item.Quality < MarkedItem.maxQuality)
             {
@@ -137,134 +146,64 @@ namespace GildedRose.Console
 
         }
 
-        public static void UpdateQuality(List<MarkedItem> Items)
+        public void UpdateQuality()
         {
 
-            for (var i = 0; i < Items.Count; i++)
+            for (var i = 0; i < markedItems.Count; i++)
             {
-                if (Items[i].isChangeable)
+                if (markedItems[i].isChangeable)
                 {
-                    UpdateDefault(Items[i]);
-                    UpdateConjured(Items[i]);
-                    UpdateIncreased(Items[i]);
-                    UpdateIncreasedWithOptions(Items[i]);
+                    UpdateDefault(markedItems[i]);
+                    UpdateConjured(markedItems[i]);
+                    UpdateIncreased(markedItems[i]);
+                    UpdateIncreasedWithOptions(markedItems[i]);
 
-                    CheckForOverdue(Items[i], Items[i].ItemType);
+                    CheckForOverdue(markedItems[i], markedItems[i].ItemType);
                 }
-
-                //if (Items[i].Name != "Aged Brie" && Items[i].Name != "Backstage passes to a TAFKAL80ETC concert")
-                //{
-                //    if (Items[i].Quality > 0)
-                //    {
-                //        if (Items[i].Name != "Sulfuras, Hand of Ragnaros")
-                //        {
-                //            Items[i].Quality = Items[i].Quality - 1;
-                //        }
-                //    }
-                //}
-                //else
-                //{
-                //    if (Items[i].Quality < 50)
-                //    {
-                //        Items[i].Quality = Items[i].Quality + 1;
-
-                //        if (Items[i].Name == "Backstage passes to a TAFKAL80ETC concert")
-                //        {
-                //            if (Items[i].SellIn < 11)
-                //            {
-                //                if (Items[i].Quality < 50)
-                //                {
-                //                    Items[i].Quality = Items[i].Quality + 1;
-                //                }
-                //            }
-
-                //            if (Items[i].SellIn < 6)
-                //            {
-                //                if (Items[i].Quality < 50)
-                //                {
-                //                    Items[i].Quality = Items[i].Quality + 1;
-                //                }
-                //            }
-                //        }
-                //    }
-                //}
-
-                //if (Items[i].Name != "Sulfuras, Hand of Ragnaros")
-                //{
-                //    Items[i].SellIn = Items[i].SellIn - 1;
-                //}
-
-                //if (Items[i].SellIn < 0)
-                //{
-                //    if (Items[i].Name != "Aged Brie")
-                //    {
-                //        if (Items[i].Name != "Backstage passes to a TAFKAL80ETC concert")
-                //        {
-                //            if (Items[i].Quality > 0)
-                //            {
-                //                if (Items[i].Name != "Sulfuras, Hand of Ragnaros")
-                //                {
-                //                    Items[i].Quality = Items[i].Quality - 1;
-                //                }
-                //            }
-                //        }
-                //        else
-                //        {
-                //            Items[i].Quality = Items[i].Quality - Items[i].Quality;
-                //        }
-                //    }
-                //    else
-                //    {
-                //        if (Items[i].Quality < 50)
-                //        {
-                //            Items[i].Quality = Items[i].Quality + 1;
-                //        }
-                //    }
-                //}
             }
         }
-    }
+        public enum ItemType : int
+        {
+            Default = 0,
+            Overdue = 1,
+            Conjured = 2,
+            Increased = 3
+        }
+        public class MarkedItem
+        {
+            /// <summary>
+            /// maxValue = 50
+            /// </summary>
+            public static int maxQuality = 50;
+            /// <summary>
+            /// minValue = 0
+            /// </summary>
+            public static int minQuality = 0;
+            /// <summary>
+            /// minValue = 2
+            /// </summary>
+            public static int ConjuredMinQualityValue = 1;
+            /// <summary>
+            /// value = 0
+            /// </summary>
+            public static int sellInDefault = 0;
+            public bool isDefault { get; set; } = true;
+            public bool isChangeable { get; set; } = true;
+            public bool isConjured { get; set; } = false;
+            public bool isQualityIncreases { get; set; } = false;
+            public bool isQualityIncreasesWithOptions { get; set; } = false;
+            public int[] IncreaseOptions { get; set; }
+            public int ItemType { get; set; } = 0;
+            public int QualityDecrement { get; set; } = 1;
+            public int QualityIncrement { get; set; } = 1;
+            public int SellInDecrement { get; set; } = 1;
+            public int SellInIncrement { get; set; } = 1;
+            public Item Item;
 
-    enum ItemType : int
-    {
-        Default = 0,
-        Overdue = 1,
-        Conjured = 2,
-        Increased = 3
-    }
-    public class MarkedItem
-    {
-        /// <summary>
-        /// maxValue = 50
-        /// </summary>
-        public static int maxQuality = 50;
-        /// <summary>
-        /// minValue = 0
-        /// </summary>
-        public static int minQuality = 0;
-        /// <summary>
-        /// minValue = 2
-        /// </summary>
-        public static int ConjuredMinQualityValue = 1;
-        /// <summary>
-        /// value = 0
-        /// </summary>
-        public static int sellInDefault = 0;
-        public bool isDefault { get; set; } = true;
-        public bool isChangeable { get; set; } = true;
-        public bool isConjured { get; set; } = false;
-        public bool isQualityIncreases { get; set; } = false;
-        public bool isQualityIncreasesWithOptions { get; set; } = false;
-        public int[] IncreaseOptions { get; set; }
-        public int ItemType { get; set; } = 0;
-        public int QualityDecrement { get; set; } = 1;
-        public int QualityIncrement { get; set; } = 1;
-        public int SellInDecrement { get; set; } = 1;
-        public int SellInIncrement { get; set; } = 1;
-        public Item Item;
+        }
 
+        
     }
-
     public class Item
     {
         public string Name { get; set; }
@@ -273,5 +212,4 @@ namespace GildedRose.Console
 
         public int Quality { get; set; }
     }
-
 }
