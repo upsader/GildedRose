@@ -43,27 +43,26 @@ namespace GildedRose.Tests
             Assert.Throws<Exception>(() => app.UpdateQuality());
         }
 
-        //    [Fact]
-        //    public void Update_Conjured_Items()
-        //    {
-        //        //ARRANGE
-        //        List<AbstractItem> items = new List<AbstractItem>()
-        //        {
-        //            new ConjuredItem(new Item { Name = "Conjured Mana Cake", SellIn = 3, Quality = 6 }),
-        //        };
+        [Theory]
+        [InlineData(10, 20, 9, 18)]
+        [InlineData(-1, 10, -2, 6)]
+        public void Update_Conjured_Items(int passedSellIn, int passedQuality, int expectedSellIn, int expectedQuality)
+        {
+            //ARRANGE
+            List<AbstractItem> items = new List<AbstractItem>()
+                {
+                    new ConjuredItem(new Item { Name = "Conjured Mana Cake", SellIn = passedSellIn, Quality = passedQuality }),
+                };
 
-        //        Program app = new Program(items);
+            Program app = new Program(items);
 
+            //ACT
+            app.UpdateQuality();
 
-        //        //ACT
-
-        //        app.UpdateQuality();
-
-        //        //ASSERT
-
-        //        Assert.Equal(-2, items[0].Item.SellIn);
-        //        Assert.Equal(18, items[0].Item.Quality);
-        //    }
+            //ASSERT
+            Assert.Equal(expectedSellIn, items[0].Item.SellIn);
+            Assert.Equal(expectedQuality, items[0].Item.Quality);
+        }
 
         //    [Fact]
         //    public void Update_Increased_Items()
