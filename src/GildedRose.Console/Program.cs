@@ -20,7 +20,7 @@ namespace GildedRose.Console
                 new DefaultItem(new Item {Name = "+5 Dexterity Vest", SellIn = 10, Quality = 20 }),
                 new ConjuredItem(new Item { Name = "Conjured Mana Cake", SellIn = 3, Quality = 6 }),
                 new IncreasedItem(new Item { Name = "Aged Brie", SellIn = 2, Quality = 0 }),
-                new IncreasedWithOptionsItem(new Item { Name = "Sulfuras, Hand of Ragnaros", SellIn = 0, Quality = 80 }, new int[2]{11, 3}),
+                new IncreasedWithOptionsItem(new Item { Name = "Backstage passes to a TAFKAL80ETC concert", SellIn = 15, Quality = 20 }, new int[2]{11, 3}),
                 new LegendaryItem(new Item { Name = "Sulfuras, Hand of Ragnaros", SellIn = 0, Quality = 80 })
             };
 
